@@ -18,16 +18,18 @@ import sql.Tables;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
     @FXML
     private Button editBtn;
 
-    @FXML
-    private TableColumn<Tables, String> tables;
+    //@FXML
+    //private TableColumn<Tables, String> tables;
 
     @FXML
     private TableView<Tables> tableview;
@@ -119,25 +121,53 @@ public class Controller implements Initializable {
     *
      */
 
-    public ObservableList<Tables> getTables() throws SQLException {
+    public ObservableList<Tables> getColumnData(String query, int colnum) throws SQLException {
         ObservableList<Tables> prod= FXCollections.observableArrayList();
         Tables tables = null;
-        prod=Connected.showtables(tables,prod);
+        prod = Connected.showtables(tables,prod ,query,colnum);
         return prod;
     }
     @FXML
-    public void showtables(ActionEvent event) throws SQLException {
+    public void showTables(ActionEvent event) throws SQLException {
+        tableview.getColumns().clear();
         //on click calls table getter getTables -> calls Connected.java to handle SQL con ->returns
-        tables.setCellValueFactory(new PropertyValueFactory<Tables,String>("Table"));
-        tableview.setItems(getTables());
+        TableColumn<Tables, String> tables = new TableColumn<Tables, String>("Table");
+        tables.setCellValueFactory(new PropertyValueFactory<Tables, String>("Table"));
+        tableview.getColumns().add(tables);
+        tableview.setItems(getColumnData("showtables",1));
+
         }
 
     @FXML
     public void getSelTable(ActionEvent event) throws SQLException {
-        Connected.getSelTable(getSelectedElement());
-        //TODO
+
+        int columnCount = Integer.parseInt(Connected.getColumnInfo(getSelectedElement(),0,"count"));
+        tableview.getColumns().clear();
+
+        for(int n=1;n<=(int)columnCount;n++) {
+            TableColumn<Tables, String> tables = new TableColumn<Tables, String>("Table");
+            tables.setCellValueFactory(new PropertyValueFactory<Tables, String>("Table"));
+            tableview.getColumns().add(tables);
+            System.out.println(n);
+            tableview.setItems(getColumnData("showtablecontent",n));
+        }
+        /*
+        int columnCount = Integer.parseInt(Connected.getColumnInfo(getSelectedElement(),0,"count"));
+        System.out.println(columnCount);
+
+        for(int n=1;n<=(int)columnCount;n++) {
+            String columnType = Connected.getColumnInfo(getSelectedElement(), n, "type");
+            System.out.println(columnType);
+
+            ArrayList<String> content=Connected.getTableColumn(getSelectedElement(),n);
+            System.out.println(content);
+        }
+        */
+
     }
+
     public String getSelectedElement(){
+        //returns content of selected tableview cell as string
         Tables tp = tableview.getFocusModel().getFocusedItem();
         String selected=tp.getTable();
         return selected;
