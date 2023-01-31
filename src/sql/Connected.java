@@ -2,10 +2,8 @@ package sql;
 
 import javafx.collections.ObservableList;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class Connected {
     //methods with req -> established connection
@@ -32,9 +30,34 @@ public class Connected {
         connection.setCatalog(db);
     }
 
-    public static void getSelTable(String selected) throws SQLException {
+    public static ResultSet getSelTable(String selected) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("select * from "+selected);
-
+        ResultSetMetaData rsm= rs.getMetaData();
+        getColumnData(rsm,5,rs);
+        return rs;
     }
+
+
+
+
+
+    public static String getColumnType(ResultSetMetaData rsm, int colnum) throws SQLException {
+        return rsm.getColumnTypeName(colnum);
+    }
+
+    public static String getColumnName(ResultSetMetaData rsm, int colnum) throws SQLException {
+        return rsm.getColumnName(colnum);
+    }
+
+    public static <coltype> ArrayList getColumnData(ResultSetMetaData rsm, int colnum,ResultSet rs) throws SQLException {
+        String coltype=getColumnType(rsm,colnum);
+        ArrayList<coltype> data = new ArrayList<coltype>();
+        while(rs.next()) {
+            data.add((coltype) rs.getString(colnum));
+        }
+        return data;
+    }
+
+
 }

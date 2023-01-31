@@ -18,6 +18,7 @@ import sql.Tables;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -26,8 +27,8 @@ public class Controller implements Initializable {
     @FXML
     private Button editBtn;
 
-    @FXML
-    private TableColumn<Tables, String> tables;
+    //@FXML
+    //private TableColumn<Tables, String> tables;
 
     @FXML
     private TableView<Tables> tableview;
@@ -128,16 +129,26 @@ public class Controller implements Initializable {
     @FXML
     public void showtables(ActionEvent event) throws SQLException {
         //on click calls table getter getTables -> calls Connected.java to handle SQL con ->returns
+        tableview.getColumns().clear();
+        TableColumn<Tables, String> tables = new TableColumn<Tables,String>("Table");
         tables.setCellValueFactory(new PropertyValueFactory<Tables,String>("Table"));
+        tableview.getColumns().add(tables);
         tableview.setItems(getTables());
         }
 
     @FXML
     public void getSelTable(ActionEvent event) throws SQLException {
-        Connected.getSelTable(getSelectedElement());
-        //TODO
+        tableview.getColumns().clear();
+        ResultSet content=Connected.getSelTable(getSelectedElement());
+
+
+
+
     }
+
+
     public String getSelectedElement(){
+        //returns content of selected tableview cell as string
         Tables tp = tableview.getFocusModel().getFocusedItem();
         String selected=tp.getTable();
         return selected;
