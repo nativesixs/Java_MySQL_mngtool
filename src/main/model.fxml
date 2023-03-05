@@ -49,7 +49,7 @@
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+<VBox prefHeight="600.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.loginController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -109,7 +109,7 @@
                         <Color red="0.624" green="0.624" blue="0.624" fx:id="x21" />
                      </textFill>
                   </Label>
-                  <PasswordField fx:id="pwField" layoutX="286.0" layoutY="227.0" prefHeight="25.0" prefWidth="131.0" text="star230902" />
+                  <PasswordField fx:id="pwField" layoutX="286.0" layoutY="227.0" prefHeight="25.0" prefWidth="131.0" />
                   <TextField fx:id="hostField" layoutX="286.0" layoutY="114.0" prefHeight="25.0" prefWidth="131.0" text="localhost" />
                   <Label alignment="CENTER" layoutX="72.0" layoutY="151.0" prefHeight="27.0" prefWidth="50.0" style="&#10;" text="Port" textAlignment="CENTER" wrapText="false">
                      <font>

@@ -7,7 +7,5 @@ public class Tables {
         this.table = table;
     }
 
-    public String getTable() {
-        return table;
-    }
+    public String getTable() {return table;}
 }
