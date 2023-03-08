@@ -1,0 +1,1 @@
+java --module-path "javafx-sdk-19\lib" --add-modules javafx.fxml,javafx.controls,javafx.graphics -jar dbmng.jar
