@@ -10,17 +10,13 @@ public class Connected {
     //methods with req -> established connection
     private static Connection connection;
 
-
     public void setConnection(Connection connection) {
         this.connection = connection;
     }
 
-    public static ResultSet grabdata(String selected) throws SQLException {
+    /*
+    REPLACED BY QUERYEXECUTE - CLEANUP?
 
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("select * from "+selected);
-        return rs;
-    }
 
     public static ResultSet showTables() throws SQLException {
         Statement statement = connection.createStatement();
@@ -33,7 +29,7 @@ public class Connected {
         ResultSet rs = statement.executeQuery("select * from "+selected+" where "+id +"= "+ '\u0022'+ command+'\u0022');
         return rs;
     }
-
+*/
     public static ResultSet queryExecute(String selected, String id,String command,int choice) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet rs = null;
@@ -64,81 +60,12 @@ public class Connected {
         return rs;
     }
 
-/*
-    public static ObservableList<Tables> showtables(Tables tables, ObservableList<Tables> prod, String query, int colnum) throws SQLException {
-        //shows all tables ->output to tableview
-        Statement statement = connection.createStatement();
-        ResultSet rs = null;
-        if(query=="showtables") {
-            rs = statement.executeQuery("show tables");
-        }
-        if(query=="showtablecontent") {
-            //Controller Controller = new Controller();
-            //String selected=Controller.getSelectedElement();
-            rs = statement.executeQuery("select * from "+"closet");
-        }
-        ResultSetMetaData rsm= rs.getMetaData();
-        while(rs.next()){
-            tables=new Tables(rs.getString(colnum));
-            prod.add(tables);
-            System.out.println(rs.getString(colnum));
-        }
-        return prod;
-    }
-    */
-
     public static void pickdatabase(String db) throws SQLException {
         //eq to use <databasename>
         Statement statement = connection.createStatement();
         connection.setCatalog(db);
     }
 
-    public static ArrayList getTableColumn(String selected,int colnum) throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("select * from "+selected);
-        ResultSetMetaData rsm= rs.getMetaData();
-        ArrayList<String> data = new ArrayList<String>();
-        while(rs.next()) {
-            data.add(rs.getString(colnum));
-        }
-        return data;
-    }
-
-
-
-
-
-    public static String getColumnType(ResultSetMetaData rsm, int colnum) throws SQLException {
-        return rsm.getColumnTypeName(colnum);
-    }
-
-    public static String getColumnType(String selected, ObservableList colnames) throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("select * from "+selected);
-        ResultSetMetaData rsm= rs.getMetaData();
-        ObservableList fullColnames=getColumnNames(selected);
-        ObservableList indexes = FXCollections.observableArrayList();
-
-
-
-        return null;
-    }
-
-    public static String getColumnInfo(String selected, int colnum,String type) throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("select * from "+selected);
-        ResultSetMetaData rsm= rs.getMetaData();
-        if(type=="type") {
-            return rsm.getColumnTypeName(colnum);
-        }
-        if(type=="count") {
-            return String.valueOf(rsm.getColumnCount());
-        }
-        if(type=="fillBox"){
-
-        }
-        return null;
-    }
     public static ObservableList getColumnNames(String selected) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet rs = statement.executeQuery("select * from "+selected);
@@ -167,16 +94,6 @@ public class Connected {
         return lst;
     }
 
-/*
-    public static <coltype> ResultSet getColumnData(ResultSetMetaData rsm, int colnum, ResultSet rs) throws SQLException {
-        coltype type= (coltype) getColumnType(rsm,colnum);
-        ArrayList<coltype> data = new ArrayList<coltype>();
-        while(rs.next()) {
-            data.add((coltype) rs.getString(colnum));
-        }
-        return (ResultSet) data;
-    }
-*/
 
     public static String getCurrentDb() throws SQLException {
         Statement statement = connection.createStatement();

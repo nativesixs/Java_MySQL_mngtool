@@ -76,7 +76,6 @@ public class loginController {
     private void handleLogin(ActionEvent event) throws SQLException, IOException {
         if (event.getSource() == loginBtn) {
             SQLHandler connection = new SQLHandler();
-            /*ArrayList*/
             dblst = SQLHandler.verifyLogin(hostField.getText(), portField.getText(), loginField.getText(), pwField.getText());
             dbChoice.setItems(FXCollections.observableArrayList(dblst));
             dbChoice.getSelectionModel().selectFirst();
@@ -90,27 +89,9 @@ public class loginController {
         stage = (Stage) confirmBtn.getScene().getWindow();
         stage.setScene(new Scene(root, 600, 500));
         stage.show();
-        /*String*/
         seldb = (String) dbChoice.getValue();
         Connected.pickdatabase(seldb);
-
-//        Dbdata dbobj = new Dbdata();
-//        dbobj.setSeldb(seldb);
-//        dbobj.setDblst(dblst);
-//
-//        Controller conobj = new Controller();
-        //conobj.getCurrentDb(dbobj);
-
-
-
     }
-/*
-    public static Dbdata saveLoginVars(){
-        Dbdata d = new Dbdata();
-        d.setSeldb(seldb);
-        d.setDblst(dblst);
-        return d;
-    }
-*/
+
 
 }

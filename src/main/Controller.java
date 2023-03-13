@@ -9,14 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.util.Callback;
 import sql.Connected;
-import sql.Tables;
+//import sql.Tables;
 
 import java.io.IOException;
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
@@ -48,7 +47,7 @@ public class Controller implements Initializable {
     @FXML private TextField searchField;
     @FXML private Button editBtn;
 
-    @FXML private TableColumn<Tables, String> tables;
+    //@FXML private TableColumn<Tables, String> tables;
 
     @FXML private TableView tableview;
 
@@ -60,18 +59,13 @@ public class Controller implements Initializable {
     }
     @FXML
     public void deleteTable(ActionEvent event) throws IOException, SQLException {
-        selected= String.valueOf(tableview.getFocusModel().getFocusedItem());
-        selected=selected.substring(1,selected.length()-1);
-
+        selected=getSelectedElement();
         boolean confirmation = prompt("Are you sure you want to delete this table ?");
         if(confirmation==false){
             return;
         } else if (confirmation==true) {
-            //TODO
-            //uncomment when ready, dont wanna drop tables while testing
-            //Connected.queryExecute(selected,"","",6);
+            Connected.queryExecute(selected,"","",6);
             System.out.println("deleting: "+selected);
-
         }
     }
 
@@ -127,20 +121,14 @@ public class Controller implements Initializable {
     @FXML
     public void showTables(ActionEvent event) throws SQLException {
         //on click calls table getter getTables -> calls Connected.java to handle SQL con ->returns
-        //ResultSet rs = Connected.showTables();
         ResultSet rs = Connected.queryExecute(selected,(String) idChoiceBox.getValue(),customCommandField.getText(),2);
         tableSetter(rs);
         }
 
     @FXML
     public void getSelTable(ActionEvent event) throws SQLException {
-        //TODO
-        //solve the getSelectedElement to work -> implement substring solution written below
-        /*String*/ selected= String.valueOf(tableview.getFocusModel().getFocusedItem());
-        selected=selected.substring(1,selected.length()-1);
-
+        selected=getSelectedElement();
         ResultSet rs = Connected.queryExecute(selected,(String) idChoiceBox.getValue(),customCommandField.getText(),1);
-        //ResultSet rs = Connected.grabdata(selected);
         tableSetter(rs);
 
         initBoxes();
@@ -160,7 +148,6 @@ public class Controller implements Initializable {
     }
     @FXML
     private void searchCustom(ActionEvent event) throws SQLException {
-        //String id= (String) idChoiceBox.getValue();
         ResultSet rs = Connected.queryExecute(selected,(String) idChoiceBox.getValue(),searchField.getText(),3);
         tableSetter(rs);
     }
@@ -199,6 +186,7 @@ public class Controller implements Initializable {
         }
         query2=query2.substring(0,query2.length()-2);
         query2+=") values (";
+        System.out.println(coltypes);
         for(int i=0;i<colnames.size();i++){
             if(coltypes.get(i)=="java.lang.Integer"){
                 query2+=userinput.get(i)+", ";
@@ -299,28 +287,15 @@ public class Controller implements Initializable {
         tableview.setItems(data);
     }
 
+
+
     public String getSelectedElement(){
         //returns content of selected tableview cell as string
-        Tables tp = (Tables) tableview.getFocusModel().getFocusedItem();
-        return tp.getTable();
-        //return null;
-    }
-    /*
-    public void showOkay(){
-        lable.setText("data inserted");
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
-        pause.setOnFinished(e -> lable.setText(null));
-        pause.play();
+        selected= String.valueOf(tableview.getFocusModel().getFocusedItem());
+        selected=selected.substring(1,selected.length()-1);
+        return selected;
     }
 
-     */
-
-    /*
-    public void getCurrentDb(Dbdata dbobj) {
-        seldb=dbobj.getSeldb();
-        dblst=dbobj.getDblst();
-    }
-    */
 }
 
 
